@@ -1,36 +1,4 @@
-/*
- * CATCH THE EGGS  —  Windows 11 Edition
- *
- * Build (Windows / MinGW):
- *   g++ catchTheEgg_windows.cpp -o catch_the_eggs.exe ^
- *       -lfreeglut -lopengl32 -lglu32 -std=c++11
- *
- *   OR with MSVC (Developer Command Prompt):
- *   cl catchTheEgg_windows.cpp /EHsc /Fe:catch_the_eggs.exe ^
- *      freeglut.lib opengl32.lib glu32.lib
- *
- * FreeGLUT setup (easiest):
- *   1. Download freeglut for MSVC/MinGW from https://freeglut.sourceforge.net/
- *   2. Copy freeglut.h -> <MinGW>/include/GL/freeglut.h
- *      Copy libfreeglut.a (MinGW) or freeglut.lib (MSVC) to lib folder
- *      Copy freeglut.dll next to the .exe
- *
- * Controls
- * --------
- *  Main Menu  : ENTER = start | H = help | ESC = quit
- *  Playing    : LEFT/RIGHT arrows OR mouse = move basket | ESC = pause
- *  Paused     : ESC or P = resume | H = help | M = main menu | Q = quit
- *  Help       : BACKSPACE = back
- *  Game Over  : ENTER = play again | M = main menu | ESC = quit
- *
- * Algorithms used
- * ---------------
- *  - Bresenham's Line Algorithm  : all straight line primitives
- *  - Midpoint Circle Algorithm   : circles and the egg shape (ellipse variant)
- *  - 2D Affine Transformations   : chicken drawing uses glPushMatrix /
- *                                  glTranslatef / glRotatef / glScalef so every
- *                                  chicken body part is placed in local space
- */
+// CATCH THE EGGS
 
 #include <GL/freeglut.h>
 #include <windows.h>
