@@ -19,10 +19,10 @@ const int WINDOW_HEIGHT = 600;
 const float HORIZON_Y = 0.15f;
 const float PLAYER_Y  = -0.80f;
 
-// ─── Game states ─────────────────────────────────────────────────────────────
+// ─── Game states /Game on which screen/state-─────────────────────────────────────────────────────────────
 enum GameState { MENU, PLAYING, PAUSED, HELP, GAMEOVER };
 GameState currentState    = MENU;
-GameState helpReturnState = MENU;
+GameState helpReturnState = MENU; //help screen theke back korar por ager state e feort
 
 // ─── Item types ──────────────────────────────────────────────────────────────
 enum ItemType {
@@ -59,7 +59,7 @@ int   gameTimeLeft = 120 * 60;
 int   bigNetTimer  = 0;
 int   slowTimer    = 0;
 float baseEggSpeed = 0.0036f;
-bool  keys[512]    = { false };
+bool  keys[512]    = { false }; //Keyboard key state store
 int   menuFrame    = 0;
 int   mouseX_raw   = WINDOW_WIDTH / 2;
 
@@ -97,9 +97,9 @@ void bresenhamLine(float x0n, float y0n, float x1n, float y1n) {
 
     int dx =  abs(x1 - x0);
     int dy = -abs(y1 - y0);
-    int sx = (x0 < x1) ? 1 : -1;
-    int sy = (y0 < y1) ? 1 : -1;
-    int err = dx + dy;
+    int sx = (x0 < x1) ? 1 : -1; //line goes in which direction 
+    int sy = (y0 < y1) ? 1 : -1;// sx= R , sx=-1 L , sy=1 UP , sy=-1 Down
+    int err = dx + dy; // decise pixel goes to x or y dir or both direction
 
     glBegin(GL_POINTS);
     while (true) {
@@ -114,10 +114,10 @@ void bresenhamLine(float x0n, float y0n, float x1n, float y1n) {
 
 // Convenience: draw a line-strip polygon outline using Bresenham
 void bresenhamRect(float x1, float y1, float x2, float y2) {
-    bresenhamLine(x1, y1, x2, y1);
-    bresenhamLine(x2, y1, x2, y2);
-    bresenhamLine(x2, y2, x1, y2);
-    bresenhamLine(x1, y2, x1, y1);
+    bresenhamLine(x1, y1, x2, y1); //bottom/top side
+    bresenhamLine(x2, y1, x2, y2);//right vertical side
+    bresenhamLine(x2, y2, x1, y2);//opposite horizontal side
+    bresenhamLine(x1, y2, x1, y1);//left vertical side
 }
 
 // ═════════════════════════════════════════════════════════════════════════════
@@ -126,16 +126,16 @@ void bresenhamRect(float x1, float y1, float x2, float y2) {
 //  Used both standalone and as the basis for filled circles and ellipses.
 // ═════════════════════════════════════════════════════════════════════════════
 void midpointCircleOutline(float cxn, float cyn, float rn) {
-    // Convert radius to pixels (use average of x/y pixel densities)
+    // Convert NDC radius to pixels (use average of x/y pixel densities)
     int r  = (int)(rn * WINDOW_WIDTH * 0.5f);
     int cx = ndcToPixelX(cxn);
-    int cy = ndcToPixelY(cyn);
+    int cy = ndcToPixelY(cyn); // convert NDC center to pixel
     if (r <= 0) return;
 
     int x = 0, y = r;
     int d = 1 - r;
 
-    // Lambda for plotting 8 symmetric points
+    // Lambda function for plotting 8 symmetric points
     auto plot8 = [&](int px, int py) {
         glVertex2f(pixelToNdcX(cx + px), pixelToNdcY(cy + py));
         glVertex2f(pixelToNdcX(cx - px), pixelToNdcY(cy + py));
@@ -152,10 +152,10 @@ void midpointCircleOutline(float cxn, float cyn, float rn) {
     while (x < y) {
         x++;
         if (d < 0) {
-            d += 2 * x + 1;
+            d += 2 * x + 1; //If point circle-er vitore thake, y change na kore error update.
         } else {
             y--;
-            d += 2 * (x - y) + 1;
+            d += 2 * (x - y) + 1;//y decrease kore circle boundary maintain kore.
         }
         plot8(x, y);
     }
@@ -182,7 +182,7 @@ void midpointCircleFilled(float cxn, float cyn, float rn) {
         hline(cx - y, cx + y, cy + x);
         hline(cx - y, cx + y, cy - x);
         hline(cx - x, cx + x, cy + y);
-        hline(cx - x, cx + x, cy - y);
+        hline(cx - x, cx + x, cy - y); //Circle-er different symmetric rows-e horizontal lines draw kore. Eivabe circle filled hoy.
         x++;
         if (d < 0) {
             d += 2 * x + 1;
